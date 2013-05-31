@@ -1,0 +1,51 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+ul{
+  list-style-type: none;
+}
+li{
+  display: block;
+  padding-top: 15px;
+  padding-left: 15px;
+}
+form{
+  background-color: #ccc;
+  display: block;
+}
+button{
+  margin: 5px;
+  background-color: #eee;
+}
+h2{
+  text-align: center;
+}
+#postsin{
+  margin-bottom: 15px;
+}
+#getusrinfo{
+  display: block;
+  width: 150px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#stats{
+  margin-bottom: 15px;
+  text-align: center;
+  display: none;
+  margin-right: auto;
+  margin-left: auto;
+}
+#buybtn{
+  display: none;
+}
+.label{
+  display: inline;
+}
+#confdiv{
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px;
+}

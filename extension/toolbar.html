@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="toolbarstyle.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.cookie.js"></script>
+    <script type="text/javascript" src="toolbarbuttons.js"></script>
+  </head>
+  <body>
+    <div id = "buttons">
+      <!--<button class="actionbtn" id="alertbutton">Alert URLs</button>
+      <button class="actionbtn" id="logbutton">Log URLs</button>
+      |||||||-->
+      <button class="actionbtn" id="minebutton">Plant mine</button>
+      <button class="actionbtn" id="cratebutton">Leave crate</button>
+      <button class="actionbtn" id="postbutton">Leave post</button>
+      |||||||
+      <button class="actionbtn" id="logoutbtn">Logout</button>
+      <!-- <button id="sendbutton">Send URLs to Node</button> -->
+      <div class="label" id="infowrapper">
+        <div class="label" id="actionlabel"></div>
+        <div class="label" id="inventory">
+          Crates: <div class="label" id="crates"></div>
+          Mines: <div class="label" id="mines"></div>
+          Posts: <div class="label" id="posts"></div>
+        </div>
+        |
+        <div class="label" id="score">(Loading...)</div> Points
+      </div>
+    </div>
+    <div id="login">
+      <form id="userinfo">
+        <input id="username" type="text">
+        <input id="pwd" type="password">
+        <button id="loginbtn" type="button">Login</button>
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+
+  "name": "Codelump",
+  "description": "A remake of the Passively Multiplayer Online Game (The Nethernet).",
+  "version": "1.102",
+
+  "permissions": [
+    "notifications",
+    "tabs"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["jquery.js", "maketoolbar.js"]
+    }
+  ],
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["jquery.js", "json2.js", "background.js"],
+    "persistent": true
+  },
+  "content_security_policy": "script-src 'self' https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js; object-src 'self'",
+  "web_accessible_resources": [
+    "icon.png",
+    "toolbar.html",
+    "urldb.json"
+  ]
+}

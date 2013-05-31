@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="buyitems.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="buyitems.js"></script>
+  </head>
+  <body>
+    <form>
+      <h2>Buy Items</h2>
+      <ul>
+        <div id="login">
+          <li>Username: <input id="userin"type="text" /></li>
+          <li>Password: <input id="pwdin" type="password"></li>
+          <li><button type="button" id="getusrinfo">Get Stats and Sign In</button></li>
+          <li>
+        </div>
+          <div id="stats">
+            <h3>User info:</h3>
+            Points: <div class="label" id="points">X</div>
+            <br>
+              Mines: <div class="label" id="minesdisp">M</div><br>
+              Crates: <div class="label" id="cratesdisp">C</div><br>
+              Posts: <div class="label" id="postsdisp">P</div>
+          </div>
+        </li>
+      </ul>
+      <hr>
+      <ul>
+        <h3 style="text-align: center;">Quantities to Purchase:</h3>
+        <li>Crates: <input id="cratesin" class="itemsin"  value="0" type="text" /> for 10 pts each</li>
+        <li>Mines: <input id="minesin" class="itemsin" value="0" type="text" /> for 10 pts each</li>
+        <li>Posts: <input id="postsin" class="itemsin" value="0" type="text" /> for 10 pts each</li>
+      <hr>
+      <div id="confdiv">
+        Price: <div class="label" id="price">$0</div>
+        <button id="buybtn" type="button">Confirm and Buy!</button>
+      </div>
+    </form>
+  </body>
+</html>

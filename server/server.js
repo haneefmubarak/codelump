@@ -155,7 +155,7 @@ db.once('open', function callback () {
                   if (!err){
                     //console.log("noerr");
                     //console.log(pages);
-                    if (pages.length === 0) {
+                    if (pages.length === 0) { //if no page, add it
                       console.log("adding page to DB");
                       var newpage = addpage(val.url);
                       newpage.save();
@@ -163,9 +163,9 @@ db.once('open', function callback () {
                       //console.log(newpage);
                     }
                     for (var i = 0; i < pages.length; i++) { //for each match
-                      if (users[0].items.mines > 0) { //if player can afford
-                        pages[i].items.mines++;
-                        users[0].items.mines--;
+                      if (users[0].items.mines >= val.num) { //if player can afford
+                        pages[i].items.mines+=val.num;
+                        users[0].items.mines-=val.num;
                         users[0].save();
                       }
                       pages[i].save();
@@ -202,9 +202,9 @@ db.once('open', function callback () {
                       //console.log(newpage);
                     }
                     for (var i = 0; i < pages.length; i++) { //for each match
-                      if (users[0].items.crates > 0){
-                        pages[i].items.crates++;
-                        users[0].items.crates--;
+                      if (users[0].items.crates >= val.num){
+                        pages[i].items.crates+=val.num;
+                        users[0].items.crates-=val.num;
                         users[0].save();
                       }
                       pages[i].save();
@@ -352,34 +352,36 @@ db.once('open', function callback () {
         }
         if (val.method == "buyitems"){
           User.find({username: val.username.toLowerCase()}, function (err, users){
-            var success = "false"; //string to reply
-            var dataS;
-            if(bcrypt.compareSync(val.pwd, users[0].pwd)){
-              var responseStr;
-              if (val.cost <= users[0].points){
-                responseStr = "can afford";
-                users[0].points-=val.cost;
-                //parseFloat() forces string into number
-                users[0].items.crates += parseFloat(val.items.crates);
-                users[0].items.mines += parseFloat(val.items.mines);
-                users[0].items.posts += parseFloat(val.items.posts);
-                users[0].save();
-              } else{
-                responseStr = "can't afford";
+            if (users[0]){
+              var success = "false"; //string to reply
+              var dataS;
+              if(bcrypt.compareSync(val.pwd, users[0].pwd)){
+                var responseStr;
+                if (val.cost <= users[0].points){
+                  responseStr = "can afford";
+                  users[0].points-=val.cost;
+                  //parseFloat() forces string into number
+                  users[0].items.crates += parseFloat(val.items.crates);
+                  users[0].items.mines += parseFloat(val.items.mines);
+                  users[0].items.posts += parseFloat(val.items.posts);
+                  users[0].save();
+                } else{
+                  responseStr = "can't afford";
+                }
+                dataS = JSON.stringify({
+                  response: responseStr,
+                  userinfo: users[0]
+                });
+                //console.log("pwd matches");
               }
-              dataS = JSON.stringify({
-                response: responseStr,
-                userinfo: users[0]
-              });
-              //console.log("pwd matches");
+              //else reply that username exists
+              //send reply
+              //dataS = "a";
+              res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
+              res.write(dataS);
+              res.end("");
+              console.log(dataS);
             }
-            //else reply that username exists
-            //send reply
-            //dataS = "a";
-            res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-            res.write(dataS);
-            res.end("");
-            console.log(dataS);
           });
         }
       });

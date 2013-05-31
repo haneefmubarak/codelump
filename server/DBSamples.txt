@@ -1,0 +1,61 @@
+
+//EXAMPLE USER DB ENTRIES:
+{username: name, password: hash+salt, points: x, items: {mines: a, crates: b, posts: c}}
+//double check username on creation, on login compare entry hash vs DB hash
+
+//EXAMPLE URL DB ENTRIES:
+
+{url: String, items: {mines: Number, crates:Number, posts: [{address: String, remainingHits: Number, posttext: String}, ...]}}
+
+
+EXAMPLE RESPONSES:
+{pointchange:x, posts: {1:{remainingVisits:2, postlinktext: "BBB", postURL: b.com}, 2:{remainingVisits:2, postlinktext: "CCC", postURL: c.com}, ...}}
+
+1 mine on page and 1 crate: {pointchange: -5, posts:{}}
+-remove 1 mine but leave crate, tell background.js to remove 5 pts
+
+4 posts on page (2 each on google and codelump): {pointchange: 0, posts: {https://www.google.com/: 2, http://codelump.com/: 2}}
+-remove 1 post from each, tell background.js addresses
+
+2 mines on page: {pointchange: -5, posts: {}}
+-remove 1 mine, tell background.js to remove 5 pts
+
+1 crate on page: {pointchange: +10, posts: {}}
+-remove 1 crate, tell background.js to add 10 pts
+
+
+  /*//create sample URL DB Entries
+  var songofmyself = new Page({
+    url:'file:///C:/Users/Gateway/Documents/Song%20of%20Myself.htm', 
+    items:{
+      mines:0, 
+      crates:5, 
+      posts:[{
+        address: "file:///C:/Users/Gateway/Documents/names.html",
+        remainingHits: 5,
+        posttext: "List of pseudonyms"
+      }, {
+        address: "file:///C:/Users/Gateway/Documents/names.html",
+        remainingHits: 2,
+        posttext: "Another link to the list of pseudonyms"
+      }]
+    }
+  });
+  var names = new Page({
+    url:'file:///C:/Users/Gateway/Documents/names.html', 
+    items:{
+      mines:2, 
+      crates:1, 
+      posts:[]
+    }
+  });
+  var names1 = new Page({
+    url:'file:///C:/Users/Gateway/Documents/names1.html', 
+    items:{
+      mines:2, 
+      crates:1, 
+      posts:[]
+    }
+  });
+  songofmyself.save();
+  names.save(); */

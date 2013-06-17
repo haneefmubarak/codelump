@@ -1,6 +1,6 @@
 $(document).ready(function(){ //when DOM ready
   var port = chrome.runtime.connect({name: "OHaiThere"});
-  var serverurl = "https://codelump.com:8080"
+  var serverurl = "http://codelump.com:8080"
   //define item labels
   var scorelabel = document.getElementById('score');
   var pwdin = document.getElementById("pwd");

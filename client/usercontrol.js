@@ -1,6 +1,6 @@
 $(document).ready( function() { //when DOM ready
 
-  var serverurl = "https://codelump.com:8080"
+  var serverurl = "http://codelump.com:8080"
   //assign elements to variables
   var addusrbtn = document.getElementById("addusr");
   var delusrbtn = document.getElementById("delusr");

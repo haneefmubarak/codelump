@@ -1,7 +1,7 @@
   //TODO: round buys to whole numbers
 $(document).ready( function() { //when DOM ready
 
-  var serverurl = "https://codelump.com:8080"
+  var serverurl = "http://codelump.com:8080"
   //assign elements to variables
   var signinbtn = document.getElementById("getusrinfo");
   var buybtn = document.getElementById("buybtn");

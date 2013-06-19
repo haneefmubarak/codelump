@@ -343,7 +343,7 @@ db.once('open', function callback () {
               //send reply
               //dataS = "a";
               res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-              res.write(success);
+              res.write(JSON.stringify({status: success, userinfo: users[0]}));
               res.end("");
               console.log("login success: "+success);
             });

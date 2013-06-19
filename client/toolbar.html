@@ -4,6 +4,8 @@
     <link rel="stylesheet" type="text/css" href="toolbarstyle.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="jquery.cookie.js"></script>
+    <script type="text/javascript" src="md5.js"></script>
+    <script type="text/javascript" src="jquery.gravatar.js"></script>
     <script type="text/javascript" src="toolbarbuttons.js"></script>
   </head>
   <body>
@@ -17,8 +19,8 @@
       |||||||
       <button class="actionbtn" id="logoutbtn">Logout</button>
       <!-- <button id="sendbutton">Send URLs to Node</button> -->
+      <div class="label"id="gravatar"> </div>
       <div class="label" id="infowrapper">
-        <div class="label" id="actionlabel"></div>
         <div class="label" id="inventory">
           Crates: <div class="label" id="crates"></div>
           Mines: <div class="label" id="mines"></div>

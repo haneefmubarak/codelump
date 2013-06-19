@@ -110,10 +110,12 @@ $(document).ready(function(){ //when DOM ready
       serverurl,
       dataS,
       function (res){
-        if (res=="true"){
+        res = JSON.parse(res);
+        if (res.status=="true"){
           $.cookie('codelumpusr', JSON.stringify({
             username: userin.value,
-            pwd: pwdin.value
+            pwd: pwdin.value,
+            email: res.userinfo.email
           }), {expires: 30, path: "/"});
           console.log('logged in!');
           console.log("cred info: "+ $.cookie('codelumpusr'));
@@ -146,6 +148,7 @@ $(document).ready(function(){ //when DOM ready
   }
 
   ////onload func
+  $('#gravatar').append($.gravatar('ebgamer29@gmail.com', {size: '40'}));
   port.postMessage({greeting:"OHaiThere", method: "gettab"});
   var listenonload = true;
   port.onMessage.addListener(function(response){

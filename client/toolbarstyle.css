@@ -1,19 +1,33 @@
 body{
-  	background-color: #efefff;
+	background-color: #efefff;
+  margin:0;
 }
 .actionbtn{
-  	display:inline-block;
+	display:inline-block;
+  margin: 8px;
 }
 #buttons{
-	display: block;
-	margin:0;
+	display: inline-block;
 }
 #infowrapper{
   float:right;
+  margin: 0;
 }
 div{
 	display: inline-block;
 }
 #userinfo{
 	display: block;
+}
+#gravatar{
+  margin: 0;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  float: right;
+}
+#infowrapper{
+  position: absolute;
+  top:8px;
+  right: 48px;
 }

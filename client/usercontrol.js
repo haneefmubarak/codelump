@@ -1,6 +1,6 @@
 $(document).ready( function() { //when DOM ready
 
-  var serverurl = "http://codelump.com:8080"
+  var codelumpurl = "http://codelump.com:8080"
   //assign elements to variables
   var addusrbtn = document.getElementById("addusr");
   var delusrbtn = document.getElementById("delusr");
@@ -26,7 +26,7 @@ $(document).ready( function() { //when DOM ready
         email: emailin.value
       }); //user data to send to server
       $.post(
-        serverurl,
+        codelumpurl,
         dataS,
         function (res){
           //console.log("response from node server: "+res);

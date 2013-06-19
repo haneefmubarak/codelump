@@ -154,6 +154,7 @@ db.once('open', function callback () {
                 res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
                 //console.log("dataS: "+dataS);
                 res.write(err);
+                console.log(err);
                 res.end("");
               };
               

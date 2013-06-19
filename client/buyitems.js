@@ -1,7 +1,8 @@
+
   //TODO: round buys to whole numbers
 $(document).ready( function() { //when DOM ready
 
-  var serverurl = "http://codelump.com:8080"
+  var codelumpurl = "http://codelump.com:8080"
   //assign elements to variables
   var signinbtn = document.getElementById("getusrinfo");
   var buybtn = document.getElementById("buybtn");
@@ -17,7 +18,7 @@ $(document).ready( function() { //when DOM ready
       pwd: pwdin.value
     });
     $.post(
-      serverurl,
+      codelumpurl,
       dataS,
       function (res){
         res = JSON.parse(res);
@@ -46,7 +47,7 @@ $(document).ready( function() { //when DOM ready
     });
     console.log(dataS);
     $.post(
-      serverurl,
+      codelumpurl,
       dataS,
       function (res){
         res = JSON.parse(res);

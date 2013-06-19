@@ -1,6 +1,5 @@
 $(document).ready(function(){ //when DOM ready
   var port = chrome.runtime.connect({name: "OHaiThere"});
-  var serverurl = "http://codelump.com:8080"
   //define item labels
   var regbtn = document.getElementById('regbtn');
   var buybtn = document.getElementById('buyitems');

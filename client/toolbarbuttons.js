@@ -1,6 +1,6 @@
 $(document).ready(function(){ //when DOM ready
   var port = chrome.runtime.connect({name: "OHaiThere"});
-  var serverurl = "http://codelump.com:8080"
+  var codelumpurl = "http://codelump.com:8080"
   //define item labels
   var scorelabel = document.getElementById('score');
   var pwdin = document.getElementById("pwd");
@@ -31,7 +31,7 @@ $(document).ready(function(){ //when DOM ready
         listen = false;
         var dataS = JSON.stringify({method:"plantmine", url:response[0].url, num:nummines, userinfo:userinfo}); //convert array to JSON (str to send)
         $.post(
-          serverurl,
+          codelumpurl,
           dataS,
           function (res){
             res = JSON.parse(res);
@@ -56,7 +56,7 @@ $(document).ready(function(){ //when DOM ready
         listen = false;
         var dataS = JSON.stringify({method:"plantcrate", url:response[0].url, num:numcrates, userinfo:userinfo}); //convert array to JSON (str to send)
         $.post(
-          serverurl,
+          codelumpurl,
           dataS,
           function (res){
             res = JSON.parse(res);
@@ -89,7 +89,7 @@ $(document).ready(function(){ //when DOM ready
           RemainingHits: numposts
         }], userinfo:userinfo}); //convert array to JSON (str to send)
         $.post(
-          serverurl,
+          codelumpurl,
           dataS,
           function (res){
             res = JSON.parse(res);
@@ -107,13 +107,13 @@ $(document).ready(function(){ //when DOM ready
     var dataS = JSON.stringify({method: "login", username: userin.value, pwd: pwdin.value}); //convert array to JSON (str to send)
     console.log(dataS);
     $.post(
-      serverurl,
+      codelumpurl,
       dataS,
       function (res){
         res = JSON.parse(res);
         if (res.status=="true"){
           $.cookie('codelumpusr', JSON.stringify({
-            username: userin.value,
+            username: res.userinfo.username,
             pwd: pwdin.value,
             email: res.userinfo.email
           }), {expires: 30, path: "/"});
@@ -148,7 +148,8 @@ $(document).ready(function(){ //when DOM ready
   }
 
   ////onload func
-  $('#gravatar').append($.gravatar('ebgamer29@gmail.com', {size: '40'}));
+  var email = JSON.parse($.cookie('codelumpusr')).email;
+  $('#gravatar').append($.gravatar(email, {size: '40'}));
   port.postMessage({greeting:"OHaiThere", method: "gettab"});
   var listenonload = true;
   port.onMessage.addListener(function(response){
@@ -158,7 +159,7 @@ $(document).ready(function(){ //when DOM ready
     console.log(dataS);
     //alert('onload ping');
     $.post(
-      serverurl,
+      codelumpurl,
       dataS,
       function (res){
         res = JSON.parse(res);

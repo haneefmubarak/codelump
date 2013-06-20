@@ -110,6 +110,7 @@ $(document).ready(function(){ //when DOM ready
       codelumpurl,
       dataS,
       function (res){
+        console.log(res);
         res = JSON.parse(res);
         if (res.status=="true"){
           $.cookie('codelumpusr', JSON.stringify({

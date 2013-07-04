@@ -149,10 +149,13 @@ $(document).ready(function(){ //when DOM ready
   }
 
   ////onload func
+  //set gravatar
   var email = JSON.parse($.cookie('codelumpusr')).email;
   $('#gravatar').append($.gravatar(email, {size: '40'}));
-  port.postMessage({greeting:"OHaiThere", method: "gettab"});
+  
+  port.postMessage({greeting:"OHaiThere", method: "gettab"}); //get current tab
   var listenonload = true;
+  //when info comes back
   port.onMessage.addListener(function(response){
     listenonload = false;
     //alert(response);

@@ -1,4 +1,4 @@
 codelump
 ========
 
-CodeLump, a web 3.0 game.
+CodeLump, a web 2.0 game.

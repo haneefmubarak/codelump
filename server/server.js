@@ -68,7 +68,7 @@ db.once('open', function callback () {
 
   var onreq = function (req, res){
     try{
-      //console.log(req);
+      ////console.log(req);
       if(req.method == 'POST'){ //when HTTP POST recieved 
         function addpage(url){
           var newpage = new Page({
@@ -79,7 +79,7 @@ db.once('open', function callback () {
               posts:[]
             }
           });
-          //console.log(newpage);
+          ////console.log(newpage);
           //newpage.save();
           return(newpage);
         }
@@ -96,9 +96,9 @@ db.once('open', function callback () {
           val.url = simplify(val.url);
           var dataS = '';
           //var scorechange = 0;
-          //console.log(val);
+          ////console.log(val);
           if (val.method == "onload" && val.userinfo){
-            console.log("onload");
+            //console.log("onload");
             User.find({username: val.userinfo.username.toLowerCase()}, function (err, users){
               if (!err){
                 if(bcrypt.compareSync(val.userinfo.pwd, users[0].pwd)){
@@ -135,16 +135,16 @@ db.once('open', function callback () {
                               postindex++; //move to next pos in array to be returned
                             }
                             //pages[i].save();
-                            //console.log("\n"+pages[i].items.posts[j].address+"\n"+pages[i].items.posts[j].remainingHits+"\n");
+                            ////console.log("\n"+pages[i].items.posts[j].address+"\n"+pages[i].items.posts[j].remainingHits+"\n");
                           };
                         }
                         pages[i].save();
                       };
-                      //console.log(pages);
-                      //console.log(users);
+                      ////console.log(pages);
+                      ////console.log(users);
                       dataS = JSON.stringify({mines:mines, crates: crates, posts: posts, userinfo: users[0]});
                       res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-                      console.log("dataS: "+dataS);
+                      //console.log("dataS: "+dataS);
                       res.write(dataS);
                       res.end("");
                     }
@@ -152,9 +152,9 @@ db.once('open', function callback () {
                 };
               } else {
                 res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-                //console.log("dataS: "+dataS);
+                ////console.log("dataS: "+dataS);
                 res.write(err);
-                console.log(err);
+                //console.log(err);
                 res.end("");
               };
               
@@ -166,14 +166,14 @@ db.once('open', function callback () {
                 if(bcrypt.compareSync(val.userinfo.pwd, users[0].pwd)){
                   Page.find({url: val.url}, function (err, pages) { //find pages in DB whose urls match
                     if (!err){
-                      //console.log("noerr");
-                      //console.log(pages);
+                      ////console.log("noerr");
+                      ////console.log(pages);
                       if (pages.length === 0) { //if no page, add it
-                        console.log("adding page to DB");
+                        //console.log("adding page to DB");
                         var newpage = addpage(val.url);
                         newpage.save();
                         pages.push(newpage);
-                        //console.log(newpage);
+                        ////console.log(newpage);
                       }
                       for (var i = 0; i < pages.length; i++) { //for each match
                         if (users[0].items.mines >= val.num) { //if player can afford
@@ -181,15 +181,16 @@ db.once('open', function callback () {
                           users[0].items.mines-=val.num;
                           users[0].save();
                         }
+                        console.log(users[0].username+" placed "+val.num+" mines on "+val.url);
                         pages[i].save();
                       }
-                      //console.log(newpage);
-                      console.log(pages);
+                      ////console.log(newpage);
+                      //console.log(pages);
                       res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
                       res.write(JSON.stringify({userinfo: users[0]}));
                       res.end();
                     } else{
-                      console.log(err);
+                      //console.log(err);
                       res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
                       res.write(JSON.stringify({userinfo: users[0]}));
                       res.end();
@@ -205,14 +206,14 @@ db.once('open', function callback () {
                 if(bcrypt.compareSync(val.userinfo.pwd, users[0].pwd)){
                   Page.find({url: val.url}, function (err, pages) { //find pages in DB whose urls match
                     if (!err){
-                      //console.log("noerr");
-                      //console.log(pages);
+                      ////console.log("noerr");
+                      ////console.log(pages);
                       if (pages.length === 0) {
-                        console.log("no page");
+                        //console.log("no page");
                         var newpage = addpage(val.url);
                         newpage.save();
                         pages.push(newpage);
-                        //console.log(newpage);
+                        ////console.log(newpage);
                       }
                       for (var i = 0; i < pages.length; i++) { //for each match
                         if (users[0].items.crates >= val.num){
@@ -220,12 +221,13 @@ db.once('open', function callback () {
                           users[0].items.crates-=val.num;
                           users[0].save();
                         }
+                        console.log(users[0].username+" placed "+val.num+" crates on "+val.url);
                         pages[i].save();
                       }
-                      //console.log(newpage);
-                      console.log(pages);
+                      ////console.log(newpage);
+                      //console.log(pages);
                     } else{
-                      console.log(err);
+                      //console.log(err);
                     }
                     res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
                     res.write(JSON.stringify({userinfo: users[0]}));
@@ -241,13 +243,13 @@ db.once('open', function callback () {
                 if(bcrypt.compareSync(val.userinfo.pwd, users[0].pwd)){
                   Page.find({url: val.url}, function (err, pages) { //find pages in DB whose urls match
                     if (!err){
-                      console.log("noerr");
+                      //console.log("noerr");
                       if (pages.length === 0) {
-                        console.log("no page");
+                        //console.log("no page");
                         var newpage = addpage(val.url);
                         newpage.save();
                         pages.push(newpage);
-                        //console.log(newpage);
+                        ////console.log(newpage);
                       }
                       for (var i = 0; i < pages.length; i++) { //for each matching URL
                         for (var j = 0; j < val.posts.length; j++){ //for each post from input
@@ -267,7 +269,7 @@ db.once('open', function callback () {
                         res.end("");
                       }
                     } else{
-                      console.log(err);
+                      //console.log(err);
                       res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
                       res.write(JSON.stringify({userinfo: users[0]}));
                       res.end("");
@@ -278,7 +280,7 @@ db.once('open', function callback () {
             });
           }
           if (val.method == "addusr"){
-            //console.log(JSON.stringify(val));
+            ////console.log(JSON.stringify(val));
             var salt = bcrypt.genSaltSync(10);
             var username = val.username.toLowerCase();
             var email = val.email;
@@ -289,7 +291,7 @@ db.once('open', function callback () {
               var success = ""; //string to reply
               //if not present add user
               if (!users[0]) {
-                //console.log("no match!");
+                ////console.log("no match!");
                 var newusr = new User({
                   username: username,
                   pwd: pwd, //hashed pw
@@ -303,11 +305,11 @@ db.once('open', function callback () {
                 });
                 success = "true";
                 newusr.save();
-                //console.log("pwd: "+pwd);
+                ////console.log("pwd: "+pwd);
               } else {
-                //console.log("match!");
+                ////console.log("match!");
                 for (var i = users.length - 1; i >= 0; i--) {
-                  console.log("pwd matches: "+bcrypt.compareSync(val.pwd, users[i].pwd));
+                  //console.log("pwd matches: "+bcrypt.compareSync(val.pwd, users[i].pwd));
                 };
                 success = "false";
               }
@@ -317,7 +319,7 @@ db.once('open', function callback () {
               res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
               res.write(success);
               res.end("");
-              console.log("adduser success: "+success);
+              //console.log("adduser success: "+success);
             });
           }
           if (val.method == "delusr"){
@@ -329,14 +331,14 @@ db.once('open', function callback () {
               var success = "false"; //string to reply
               //if not present add user
               if (!users[0]) {
-                console.log("no match!");
+                //console.log("no match!");
                 success = "false"
               } else {
-                console.log("match!");
+                //console.log("match!");
                 for (var i = users.length - 1; i >= 0; i--) {
                   if(bcrypt.compareSync(val.pwd, users[i].pwd)){
                     success = "true";
-                    console.log("pwd matches");
+                    //console.log("pwd matches");
                   }
                 };
               }
@@ -346,7 +348,7 @@ db.once('open', function callback () {
               res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
               res.write(JSON.stringify({status: success, userinfo: users[0]}));
               res.end("");
-              console.log("login success: "+success);
+              //console.log("login success: "+success);
             });
           }
           if (val.method == "getusrinfo"){
@@ -385,7 +387,7 @@ db.once('open', function callback () {
                     response: responseStr,
                     userinfo: users[0]
                   });
-                  //console.log("pwd matches");
+                  ////console.log("pwd matches");
                 }
                 //else reply that username exists
                 //send reply
@@ -393,20 +395,20 @@ db.once('open', function callback () {
                 res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
                 res.write(dataS);
                 res.end("");
-                console.log(dataS);
+                //console.log(dataS);
               }
             });
           }
         });
       }
       if(req.method == 'GET'){
-        console.log("get");
+        //console.log("get");
         res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
         res.write('Please do not connect from browser.\n');
         res.end('');
       }
     } catch (err) {
-      console.log(err);
+      //console.log(err);
     }
     
   };
@@ -420,11 +422,11 @@ db.once('open', function callback () {
           if (Math.random() >= .5){
             pages[pagenum].items.crates++;
             pages[pagenum].save();
-            console.log(pages[pagenum]);
+            //console.log(pages[pagenum]);
           } else {
             pages[pagenum].items.mines++;
             pages[pagenum].save();
-            console.log(pages[pagenum]);
+            //console.log(pages[pagenum]);
           }
         }
       }
@@ -433,8 +435,8 @@ db.once('open', function callback () {
 
   // server start
   var port = process.env.PORT || 8080; //compatibility  with cloud9 IDE/Hosting
-  console.log("Listening on port "+port);
+  //console.log("Listening on port "+port);
   //var server = https.createServer(options, onreq).listen(port);
   http/*s*/.createServer(/*options, */onreq).listen(port);
-  //console.log(server);
+  ////console.log(server);
 });

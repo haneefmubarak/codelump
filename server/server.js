@@ -116,6 +116,7 @@ db.once('open', function callback () {
                           pages[i].items.mines--;
                           users[0].points -= 5;
                           users[0].save();
+                          console.log(users[0].username +' got hit by a mine!');
                         }
                         if (pages[i].items.crates>0){
                           //scorechange+=10;
@@ -123,6 +124,7 @@ db.once('open', function callback () {
                           pages[i].items.crates--;
                           users[0].points += 10;
                           users[0].save();
+                          console.log(users[0].username +' found a crate!');
                         }
                         if (pages[i].items.posts != []){ //for each page
                           //posts=pages[i].items.posts;
@@ -175,15 +177,16 @@ db.once('open', function callback () {
                         pages.push(newpage);
                         ////console.log(newpage);
                       }
-                      for (var i = 0; i < pages.length; i++) { //for each match
+                      var i = 0;
+                      for (i = 0; i < pages.length; i++) { //for each match
                         if (users[0].items.mines >= val.num) { //if player can afford
                           pages[i].items.mines+=val.num;
                           users[0].items.mines-=val.num;
                           users[0].save();
                         }
-                        console.log(users[0].username+" placed "+val.num+" mines on "+val.url);
                         pages[i].save();
                       }
+                      console.log(users[0].username+" placed "+i+" mines on "+val.url);
                       ////console.log(newpage);
                       //console.log(pages);
                       res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
@@ -215,15 +218,16 @@ db.once('open', function callback () {
                         pages.push(newpage);
                         ////console.log(newpage);
                       }
-                      for (var i = 0; i < pages.length; i++) { //for each match
+                      var i = 0;
+                      for (i = 0; i < pages.length; i++) { //for each match
                         if (users[0].items.crates >= val.num){
                           pages[i].items.crates+=val.num;
                           users[0].items.crates-=val.num;
                           users[0].save();
                         }
-                        console.log(users[0].username+" placed "+val.num+" crates on "+val.url);
                         pages[i].save();
                       }
+                      console.log(users[0].username+" placed "+i+" crates on "+val.url);
                       ////console.log(newpage);
                       //console.log(pages);
                     } else{

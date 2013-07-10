@@ -116,7 +116,7 @@ db.once('open', function callback () {
                           pages[i].items.mines--;
                           users[0].points -= 5;
                           users[0].save();
-                          console.log(users[0].username +' got hit by a mine!');
+                          console.log(users[0].username +' got hit by a mine at '+val.url+'!');
                         }
                         if (pages[i].items.crates>0){
                           //scorechange+=10;
@@ -124,7 +124,7 @@ db.once('open', function callback () {
                           pages[i].items.crates--;
                           users[0].points += 10;
                           users[0].save();
-                          console.log(users[0].username +' found a crate!');
+                          console.log(users[0].username +' found a crate at '+val.url+'!');
                         }
                         if (pages[i].items.posts != []){ //for each page
                           //posts=pages[i].items.posts;
@@ -186,7 +186,7 @@ db.once('open', function callback () {
                         }
                         pages[i].save();
                       }
-                      console.log(users[0].username+" placed "+i+" mines on "+val.url);
+                      console.log(users[0].username+" placed some mines on "+val.url);
                       ////console.log(newpage);
                       //console.log(pages);
                       res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
@@ -227,7 +227,7 @@ db.once('open', function callback () {
                         }
                         pages[i].save();
                       }
-                      console.log(users[0].username+" placed "+i+" crates on "+val.url);
+                      console.log(users[0].username+" placed some crates on "+val.url);
                       ////console.log(newpage);
                       //console.log(pages);
                     } else{

@@ -23,8 +23,11 @@ db.once('open', function callback () {
   var URLDBSchema = mongoose.Schema({
     url: String,
     items:{
-      mines: Number,
-      crates: Number,
+      mines: Array,
+      crates: Array, /*[{
+        placer: String (userid),
+        RemainingHits: Number
+        }, ... ] */
       posts: Array /*[{
         address: String, 
         RemainingHits: Number, 
@@ -74,8 +77,8 @@ db.once('open', function callback () {
           var newpage = new Page({
             url: url, 
             items:{
-              mines:0, 
-              crates:0, 
+              mines:[], 
+              crates:[], 
               posts:[]
             }
           });
@@ -102,29 +105,49 @@ db.once('open', function callback () {
             User.find({username: val.userinfo.username.toLowerCase()}, function (err, users){
               if (!err){
                 if(bcrypt.compareSync(val.userinfo.pwd, users[0].pwd)){
-                  var mines = 0;
-                  var crates = 0;
+                  var mines = [];
+                  var mineindex = 0;
+                  var crates = [];
+                  var crateindex = 0;
                   var posts = [];
                   var postindex = 0;
                   Page.find({url: val.url}, function (err, pages) { //find match
                     if (!err){
                       for (var i = 0; i < pages.length; i++) { //for each match
                         //pages[i].count++; //increment counter in DB
-                        if (pages[i].items.mines>0){
-                          //scorechange-=5;
-                          mines++;
-                          pages[i].items.mines--;
-                          users[0].points -= 5;
-                          users[0].save();
-                          console.log(users[0].username +' got hit by a mine at '+val.url+'!');
+                        if (pages[i].items.crates>0){
+                          //posts=pages[i].items.posts;
+                          for (var j = 0; j < pages[i].items.mines.length; j++) { //for each post on page
+                            var thismine = pages[i].items.crates[j];
+                            if (thismine.remainingHits){
+                              mines[mineindex] = pages[i].items.mines[j]; //set post in array to return equal to post
+                              thismine.remainingHits--; //decrement remainingHits counter
+                              pages[i].items.mines.set(j, thismine); //store changes to DB
+                              mineindex++; //move to next pos in array to be returned
+                              users[0].points -= 5;
+                              users[0].save();
+                              console.log(users[0].username +' got hit by a mine at '+val.url+' placed by '+thismine.placer+'!');
+                            }
+                            //pages[i].save();
+                            ////console.log("\n"+pages[i].items.posts[j].address+"\n"+pages[i].items.posts[j].remainingHits+"\n");
+                          };
                         }
                         if (pages[i].items.crates>0){
-                          //scorechange+=10;
-                          crates++;
-                          pages[i].items.crates--;
-                          users[0].points += 10;
-                          users[0].save();
-                          console.log(users[0].username +' found a crate at '+val.url+'!');
+                          //posts=pages[i].items.posts;
+                          for (var j = 0; j < pages[i].items.crates.length; j++) { //for each post on page
+                            var thiscrate = pages[i].items.crates[j];
+                            if (thiscrate.remainingHits){
+                              crates[crateindex] = pages[i].items.crates[j]; //set post in array to return equal to post
+                              thiscrate.remainingHits--; //decrement remainingHits counter
+                              pages[i].items.crates.set(j, thiscrate); //store changes to DB
+                              crateindex++; //move to next pos in array to be returned
+                              users[0].points += 10;
+                              users[0].save();
+                              console.log(users[0].username +' found a crate at '+val.url+' placed by '+thiscrate.placer+'!');
+                            }
+                            //pages[i].save();
+                            ////console.log("\n"+pages[i].items.posts[j].address+"\n"+pages[i].items.posts[j].remainingHits+"\n");
+                          };
                         }
                         if (pages[i].items.posts != []){ //for each page
                           //posts=pages[i].items.posts;
@@ -177,26 +200,21 @@ db.once('open', function callback () {
                         pages.push(newpage);
                         ////console.log(newpage);
                       }
-                      var i = 0;
-                      for (i = 0; i < pages.length; i++) { //for each match
-                        if (users[0].items.mines >= val.num) { //if player can afford
-                          pages[i].items.mines+=val.num;
-                          users[0].items.mines-=val.num;
+                      for (var i = 0; i < pages.length; i++) { //for each matching URL
+                        if (users[0].items.mines >= val.num){ //if user can afford
+                          pages[i].items.mines.push({ //add post
+                            remainingHits: val.num, 
+                            placer: val.userinfo.username
+                          });
+                          users[0].items.mines -= val.num;
                           users[0].save();
                         }
                         pages[i].save();
+                        console.log(users[0].username+" placed some mines on "+val.url);
+                        res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
+                        res.write(JSON.stringify({userinfo: users[0]}));
+                        res.end("");
                       }
-                      console.log(users[0].username+" placed some mines on "+val.url);
-                      ////console.log(newpage);
-                      //console.log(pages);
-                      res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-                      res.write(JSON.stringify({userinfo: users[0]}));
-                      res.end();
-                    } else{
-                      //console.log(err);
-                      res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-                      res.write(JSON.stringify({userinfo: users[0]}));
-                      res.end();
                     }
                   });
                 }
@@ -204,13 +222,12 @@ db.once('open', function callback () {
             });
           }
           if (val.method == "plantcrate" && val.userinfo){
-            User.find({username: val.userinfo.username.toLowerCase()}, function (err, users) { 
-              if(!err){ 
+            User.find({username: val.userinfo.username.toLowerCase()}, function (err, users) {
+              if(!err){
                 if(bcrypt.compareSync(val.userinfo.pwd, users[0].pwd)){
                   Page.find({url: val.url}, function (err, pages) { //find pages in DB whose urls match
                     if (!err){
-                      ////console.log("noerr");
-                      ////console.log(pages);
+                      //console.log("noerr");
                       if (pages.length === 0) {
                         //console.log("no page");
                         var newpage = addpage(val.url);
@@ -218,24 +235,27 @@ db.once('open', function callback () {
                         pages.push(newpage);
                         ////console.log(newpage);
                       }
-                      var i = 0;
-                      for (i = 0; i < pages.length; i++) { //for each match
-                        if (users[0].items.crates >= val.num){
-                          pages[i].items.crates+=val.num;
-                          users[0].items.crates-=val.num;
+                      for (var i = 0; i < pages.length; i++) { //for each matching URL
+                        if (users[0].items.crates >= val.num){ //if user can afford
+                          pages[i].items.crates.push({ //add post
+                            remainingHits: val.num, 
+                            placer: val.userinfo.username
+                          });
+                          users[0].items.crates -= val.num;
                           users[0].save();
                         }
                         pages[i].save();
+                        console.log(users[0].username+" placed some crates on "+val.url);
+                        res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
+                        res.write(JSON.stringify({userinfo: users[0]}));
+                        res.end("");
                       }
-                      console.log(users[0].username+" placed some crates on "+val.url);
-                      ////console.log(newpage);
-                      //console.log(pages);
                     } else{
                       //console.log(err);
+                      res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
+                      res.write(JSON.stringify({userinfo: users[0]}));
+                      res.end("");
                     }
-                    res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-                    res.write(JSON.stringify({userinfo: users[0]}));
-                    res.end("");
                   });
                 }
               }
@@ -417,21 +437,18 @@ db.once('open', function callback () {
     
   };
 
-  //randiom item generator
+  //randiom crate generator
   setInterval(function(){
     Page.find(function(err, pages){
       if (!err){
         var pagenum = Math.round(Math.random()*pages.length);
         if (pages[pagenum]){
-          if (Math.random() >= .5){
-            pages[pagenum].items.crates++;
-            pages[pagenum].save();
-            //console.log(pages[pagenum]);
-          } else {
-            pages[pagenum].items.mines++;
-            pages[pagenum].save();
-            //console.log(pages[pagenum]);
-          }
+          pages[pagenum].items.crates.push({
+            remainingHits: 10,
+            placer: "system"
+          });
+          pages[pagenum].save();
+          //console.log(pages[pagenum]);
         }
       }
     });

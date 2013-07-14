@@ -21,7 +21,7 @@ $(document).ready(function(){ //when DOM ready
 
   var userinfo;
   minebutton.onclick = function() {
-    var nummines = 1*(prompt("Please enter the number of posts you wish to add:", "1234"))
+    var nummines = 1*(prompt("Please enter the number of mines you wish to add:", "1234"))
     if (nummines==NaN) {
       alert("Please enter a number.");
     }else{
@@ -46,7 +46,7 @@ $(document).ready(function(){ //when DOM ready
     }
   }
   cratebutton.onclick = function() {
-    var numcrates = 1*(prompt("Please enter the number of posts you wish to add:", "1234"))
+    var numcrates = 1*(prompt("Please enter the number of crates you wish to add:", "1234"))
     if (numcrates==NaN) {
       alert("Please enter a number.");
     }else{

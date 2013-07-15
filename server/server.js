@@ -119,7 +119,7 @@ db.once('open', function callback () {
                           //posts=pages[i].items.posts;
                           for (var j = 0; j < pages[i].items.mines.length; j++) { //for each post on page
                             var thismine = pages[i].items.crates[j];
-                            if (thismine.remainingHits){
+                            if ((thismine) && (thismine.remainingHits)){
                               mines[mineindex] = pages[i].items.mines[j]; //set post in array to return equal to post
                               thismine.remainingHits--; //decrement remainingHits counter
                               pages[i].items.mines.set(j, thismine); //store changes to DB
@@ -128,7 +128,7 @@ db.once('open', function callback () {
                               users[0].save();
                               console.log(users[0].username +' got hit by a mine at '+val.url+' placed by '+thismine.placer+'!');
                             }
-                            if (thismine.remainingHits === 0){
+                            if ((thismine) && (thismine.remainingHits === 0)){
                               pages[i].items.mines.set(j, {});
                             }
                             //pages[i].save();
@@ -139,7 +139,7 @@ db.once('open', function callback () {
                           //posts=pages[i].items.posts;
                           for (var j = 0; j < pages[i].items.crates.length; j++) { //for each post on page
                             var thiscrate = pages[i].items.crates[j];
-                            if (thiscrate.remainingHits){
+                            if ((thiscrate) && (thiscrate.remainingHits)){
                               crates[crateindex] = pages[i].items.crates[j]; //set post in array to return equal to post
                               thiscrate.remainingHits--; //decrement remainingHits counter
                               pages[i].items.crates.set(j, thiscrate); //store changes to DB
@@ -148,7 +148,7 @@ db.once('open', function callback () {
                               users[0].save();
                               console.log(users[0].username +' found a crate at '+val.url+' placed by '+thiscrate.placer+'!');
                             }
-                            if (thiscrate.remainingHits === 0){
+                            if ((thiscrate) && (thiscrate.remainingHits === 0)){
                               pages[i].items.crates.set(j, {});
                             }
                             //pages[i].save();

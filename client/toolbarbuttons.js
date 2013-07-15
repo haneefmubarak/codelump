@@ -186,7 +186,7 @@ $(document).ready(function(){ //when DOM ready
         if (res.posts[0]){
           alertS+="Posts:\n";
           for (var i = 0; i < res.posts.length; i++) {
-            alertS+=((i+1)+"\n");
+            alertS+=((i+1)+")\n");
             alertS+=(" URL: "+res.posts[i].address+"\n");
             alertS+=(" Text: "+res.posts[i].posttext+"\n");
           };

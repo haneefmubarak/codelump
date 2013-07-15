@@ -448,11 +448,11 @@ db.once('open', function callback () {
             placer: "system"
           });
           pages[pagenum].save();
-          //console.log(pages[pagenum]);
+          console.log('system placed a mine at '+pages[pagenum].url);
         }
       }
     });
-  }, 300000); //every 5 min add 1 crate/mine (random) to a random page in DB and log change
+  }, 300000); //every 5 min add 1 crate to a random page in DB and log change
 
   // server start
   var port = process.env.PORT || 8080; //compatibility  with cloud9 IDE/Hosting

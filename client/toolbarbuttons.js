@@ -177,11 +177,11 @@ $(document).ready(function(){ //when DOM ready
         //console.log(res);
         var alertS = "";
         //define alert string
-        if (res.crates){
-          alertS+="You found a crate and gained 10 points!\n";
+        if (res.crates.length != 0){
+          alertS+="You found "+res.crates.length+" crates and gained "+res.crates.length*10+" points!\n";
         }
-        if (res.mines){
-          alertS+="You stepped on a mine and lost 5 points!\n";
+        if (res.mines.length != 0){
+          alertS+="You stepped on "+res.mines.length+" mines and lost "+res.mines.length*5+" points!\n";
         }
         if (res.posts[0]){
           alertS+="Posts:\n";

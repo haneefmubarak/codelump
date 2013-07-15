@@ -447,7 +447,7 @@ db.once('open', function callback () {
             placer: "system"
           });
           pages[pagenum].save();
-          console.log('system placed a crate at '+pages[pagenum].url);
+          //console.log('system placed a crate at '+pages[pagenum].url);
         }
       }
     });

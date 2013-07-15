@@ -128,6 +128,9 @@ db.once('open', function callback () {
                               users[0].save();
                               console.log(users[0].username +' got hit by a mine at '+val.url+' placed by '+thismine.placer+'!');
                             }
+                            if (thismine.remainingHits === 0){
+                              pages[i].items.mines.set(j, {});
+                            }
                             //pages[i].save();
                             ////console.log("\n"+pages[i].items.posts[j].address+"\n"+pages[i].items.posts[j].remainingHits+"\n");
                           };
@@ -144,6 +147,9 @@ db.once('open', function callback () {
                               users[0].points += 10;
                               users[0].save();
                               console.log(users[0].username +' found a crate at '+val.url+' placed by '+thiscrate.placer+'!');
+                            }
+                            if (thiscrate.remainingHits === 0){
+                              pages[i].items.crates.set(j, {});
                             }
                             //pages[i].save();
                             ////console.log("\n"+pages[i].items.posts[j].address+"\n"+pages[i].items.posts[j].remainingHits+"\n");
@@ -202,12 +208,25 @@ db.once('open', function callback () {
                       }
                       for (var i = 0; i < pages.length; i++) { //for each matching URL
                         if (users[0].items.mines >= val.num){ //if user can afford
-                          pages[i].items.mines.push({ //add post
-                            remainingHits: val.num, 
-                            placer: val.userinfo.username
-                          });
-                          users[0].items.mines -= val.num;
-                          users[0].save();
+                          var bool = false;
+                          for (var k = 0; k < pages[i].items.mines.length; k++) {
+                            if (pages[i].items.mines[k].placer == val.userinfo.username){
+                              bool = true;
+                              var thismine = pages[i].items.mines[k]
+                              thismine.remainingHits += val.num;
+                              pages[i].items.mines.set(k, thismine);
+                              users[0].items.mines -= val.num;
+                              users[0].save();
+                            }
+                          };
+                          if (!bool){
+                            pages[i].items.mines.push({ //add post
+                              remainingHits: val.num, 
+                              placer: val.userinfo.username
+                            });
+                            users[0].items.mines -= val.num;
+                            users[0].save();
+                          }
                         }
                         pages[i].save();
                         console.log(users[0].username+" placed some mines on "+val.url);
@@ -227,9 +246,10 @@ db.once('open', function callback () {
                 if(bcrypt.compareSync(val.userinfo.pwd, users[0].pwd)){
                   Page.find({url: val.url}, function (err, pages) { //find pages in DB whose urls match
                     if (!err){
-                      //console.log("noerr");
-                      if (pages.length === 0) {
-                        //console.log("no page");
+                      ////console.log("noerr");
+                      ////console.log(pages);
+                      if (pages.length === 0) { //if no page, add it
+                        //console.log("adding page to DB");
                         var newpage = addpage(val.url);
                         newpage.save();
                         pages.push(newpage);
@@ -237,12 +257,25 @@ db.once('open', function callback () {
                       }
                       for (var i = 0; i < pages.length; i++) { //for each matching URL
                         if (users[0].items.crates >= val.num){ //if user can afford
-                          pages[i].items.crates.push({ //add post
-                            remainingHits: val.num, 
-                            placer: val.userinfo.username
-                          });
-                          users[0].items.crates -= val.num;
-                          users[0].save();
+                          var bool = false;
+                          for (var k = 0; k < pages[i].items.crates.length; k++) {
+                            if (pages[i].items.crates[k].placer == val.userinfo.username){
+                              bool = true;
+                              var thiscrate = pages[i].items.crates[k]
+                              thiscrate.remainingHits += val.num;
+                              pages[i].items.crates.set(k, thiscrate);
+                              users[0].items.crates -= val.num;
+                              users[0].save();
+                            }
+                          };
+                          if (!bool){
+                            pages[i].items.crates.push({ //add post
+                              remainingHits: val.num, 
+                              placer: val.userinfo.username
+                            });
+                            users[0].items.crates -= val.num;
+                            users[0].save();
+                          }
                         }
                         pages[i].save();
                         console.log(users[0].username+" placed some crates on "+val.url);
@@ -250,11 +283,6 @@ db.once('open', function callback () {
                         res.write(JSON.stringify({userinfo: users[0]}));
                         res.end("");
                       }
-                    } else{
-                      //console.log(err);
-                      res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-                      res.write(JSON.stringify({userinfo: users[0]}));
-                      res.end("");
                     }
                   });
                 }

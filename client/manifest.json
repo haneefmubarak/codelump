@@ -3,7 +3,7 @@
 
   "name": "CodeLump",
   "description": "A remake of the Passively Multiplayer Online Game (The Nethernet).",
-  "version": "1.200",
+  "version": "1.350",
 
   "permissions": [
     "notifications",

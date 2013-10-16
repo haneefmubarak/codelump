@@ -118,7 +118,7 @@ db.once('open', function callback () {
                         if (pages[i].items.mines != []){
                           //posts=pages[i].items.posts;
                           for (var j = 0; j < pages[i].items.mines.length; j++) { //for each post on page
-                            var thismine = pages[i].items.crates[j];
+                            var thismine = pages[i].items.mines[j];
                             if ((thismine) && (thismine.remainingHits)){
                               mines[mineindex] = pages[i].items.mines[j]; //set post in array to return equal to post
                               thismine.remainingHits--; //decrement remainingHits counter

@@ -173,10 +173,32 @@ $(document).ready(function(){ //when DOM ready
         postsdisp.innerHTML = res.userinfo.items.posts;
 
         //res = JSON.parse(res); //convert JSON to array
-        console.log("response from node server: "+res);
+        console.log("response from node server: ");
+        console.log(res);
         //console.log(res);
-        var alertS = "";
-        //define alert string
+        var mines = []; var crates = []; var posts = [];
+        for (var i = res.mines.length - 1; i >= 0; i--) {
+          mines[i] = {};
+          mines[i].title = res.mines[i].placer;
+          mines[i].message = '-5 points';
+        };
+        for (var i = res.crates.length - 1; i >= 0; i--) {
+          crates[i] = {};
+          crates[i].title = res.crates[i].placer;
+          crates[i].message = '+10 points';
+        };
+        for (var i = res.posts.length - 1; i >= 0; i--) {
+          posts[i] = {};
+          posts[i].title = res.posts[i].posttext;
+          posts[i].message = res.posts[i].URL;
+        };
+        var items = {
+          mines: mines,
+          crates: crates,
+          posts: posts
+        };
+        console.log(items);
+        /*//define alert string
         if (res.crates.length != 0){
           alertS+="You found "+res.crates.length+" crates and gained "+res.crates.length*10+" points!\n";
         }
@@ -190,11 +212,11 @@ $(document).ready(function(){ //when DOM ready
             alertS+=(" URL: "+res.posts[i].address+"\n");
             alertS+=(" Text: "+res.posts[i].posttext+"\n");
           };
-        }
+        }*/
         //display alert string
-        if (alertS){
+        if (items.mines || items.crates || items.posts){
           //alert(alertS);
-          port.postMessage({method: "notif", alertS: alertS}, function(response) {});
+          port.postMessage({method: "notif", items: items}, function(response) {});
         }
       }
     );

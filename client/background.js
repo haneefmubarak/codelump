@@ -54,16 +54,35 @@ chrome.runtime.onConnect.addListener(function(port) {
       port.postMessage(genbar);
     }
     if (request.method == "notif"){
-      var alertS = request.alertS;
-      var notif = webkitNotifications.createNotification(
-        "icon.png",
-        "Page info from CodeLump",
-        alertS
-      );
-      notif.show();
-      setTimeout(function(){
-        notif.close();
-      }, 4000); //close notification  after 4 sec
+      var items = request.items;
+      console.log(items);
+      chrome.notifications.create(new Number(new Date()).toString(), {
+        type: 'list',
+        title: 'CodeLump - Crates',
+        message: 'Crates',
+        iconUrl: 'icon.png',
+        items: items.crates
+      }, function(e){
+        console.log(e);
+      });
+      chrome.notifications.create(new Number(new Date()).toString()+1, {
+        type: 'list',
+        title: 'CodeLump - Mines',
+        message: 'Mines',
+        iconUrl: 'icon.png',
+        items: items.mines
+      }, function(e){
+        console.log(e);
+      });
+      chrome.notifications.create(new Number(new Date()).toString()+2, {
+        type: 'list',
+        title: 'CodeLump - Posts',
+        message: 'Posts',
+        iconUrl: 'icon.png',
+        items: items.posts
+      }, function(e){
+        console.log(e);
+      });
     }
   });
 });

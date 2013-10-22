@@ -21,7 +21,7 @@ $(document).ready(function(){ //when DOM ready
 
   var userinfo;
   minebutton.onclick = function() {
-    var nummines = 1*(prompt("Please enter the number of posts you wish to add:", "1234"))
+    var nummines = 1*(prompt("Please enter the number of mines you wish to add:", "1234"))
     if (nummines==NaN) {
       alert("Please enter a number.");
     }else{
@@ -46,7 +46,7 @@ $(document).ready(function(){ //when DOM ready
     }
   }
   cratebutton.onclick = function() {
-    var numcrates = 1*(prompt("Please enter the number of posts you wish to add:", "1234"))
+    var numcrates = 1*(prompt("Please enter the number of crates you wish to add:", "1234"))
     if (numcrates==NaN) {
       alert("Please enter a number.");
     }else{
@@ -110,6 +110,7 @@ $(document).ready(function(){ //when DOM ready
       codelumpurl,
       dataS,
       function (res){
+        console.log(res);
         res = JSON.parse(res);
         if (res.status=="true"){
           $.cookie('codelumpusr', JSON.stringify({
@@ -148,10 +149,13 @@ $(document).ready(function(){ //when DOM ready
   }
 
   ////onload func
+  //set gravatar
   var email = JSON.parse($.cookie('codelumpusr')).email;
   $('#gravatar').append($.gravatar(email, {size: '40'}));
-  port.postMessage({greeting:"OHaiThere", method: "gettab"});
+  
+  port.postMessage({greeting:"OHaiThere", method: "gettab"}); //get current tab
   var listenonload = true;
+  //when info comes back
   port.onMessage.addListener(function(response){
     listenonload = false;
     //alert(response);
@@ -169,28 +173,50 @@ $(document).ready(function(){ //when DOM ready
         postsdisp.innerHTML = res.userinfo.items.posts;
 
         //res = JSON.parse(res); //convert JSON to array
-        console.log("response from node server: "+res);
+        console.log("response from node server: ");
+        console.log(res);
         //console.log(res);
-        var alertS = "";
-        //define alert string
-        if (res.crates){
-          alertS+="You found a crate and gained 10 points!\n";
+        var mines = []; var crates = []; var posts = [];
+        for (var i = res.mines.length - 1; i >= 0; i--) {
+          mines[i] = {};
+          mines[i].title = res.mines[i].placer;
+          mines[i].message = '-5 points';
+        };
+        for (var i = res.crates.length - 1; i >= 0; i--) {
+          crates[i] = {};
+          crates[i].title = res.crates[i].placer;
+          crates[i].message = '+10 points';
+        };
+        for (var i = res.posts.length - 1; i >= 0; i--) {
+          posts[i] = {};
+          posts[i].title = res.posts[i].posttext;
+          posts[i].message = res.posts[i].URL;
+        };
+        var items = {
+          mines: mines,
+          crates: crates,
+          posts: posts
+        };
+        console.log(items);
+        /*//define alert string
+        if (res.crates.length != 0){
+          alertS+="You found "+res.crates.length+" crates and gained "+res.crates.length*10+" points!\n";
         }
-        if (res.mines){
-          alertS+="You stepped on a mine and lost 5 points!\n";
+        if (res.mines.length != 0){
+          alertS+="You stepped on "+res.mines.length+" mines and lost "+res.mines.length*5+" points!\n";
         }
         if (res.posts[0]){
           alertS+="Posts:\n";
           for (var i = 0; i < res.posts.length; i++) {
-            alertS+=((i+1)+"\n");
+            alertS+=((i+1)+")\n");
             alertS+=(" URL: "+res.posts[i].address+"\n");
             alertS+=(" Text: "+res.posts[i].posttext+"\n");
           };
-        }
+        }*/
         //display alert string
-        if (alertS){
+        if (items.mines || items.crates || items.posts){
           //alert(alertS);
-          port.postMessage({method: "notif", alertS: alertS}, function(response) {});
+          port.postMessage({method: "notif", items: items}, function(response) {});
         }
       }
     );
